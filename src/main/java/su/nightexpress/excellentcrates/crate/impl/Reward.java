@@ -1,6 +1,7 @@
 package su.nightexpress.excellentcrates.crate.impl;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -8,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import su.nightexpress.excellentcrates.CratesPlugin;
 import su.nightexpress.excellentcrates.Placeholders;
+import su.nightexpress.excellentcrates.api.event.CrateObtainItemRewardEvent;
+import su.nightexpress.excellentcrates.api.event.CrateObtainRewardEvent;
 import su.nightexpress.excellentcrates.api.opening.Weighted;
 import su.nightexpress.excellentcrates.config.Config;
 import su.nightexpress.excellentcrates.config.Lang;
@@ -305,6 +308,11 @@ public class Reward implements Weighted, Placeholder {
                     meta.setLore(loreHas);
                 }
             });
+
+            CrateObtainItemRewardEvent event = new CrateObtainItemRewardEvent(this, give, player);
+            Bukkit.getPluginManager().callEvent(event);
+
+            give = event.getItem();
 
             Players.addItem(player, give);
         });
