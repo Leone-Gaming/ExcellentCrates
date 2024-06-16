@@ -1,5 +1,7 @@
 package su.nightexpress.excellentcrates.crate;
 
+import me.clip.placeholderapi.libs.kyori.adventure.text.Component;
+import me.clip.placeholderapi.libs.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -30,6 +32,7 @@ import su.nightexpress.excellentcrates.data.impl.CrateUser;
 import su.nightexpress.excellentcrates.hologram.HologramType;
 import su.nightexpress.excellentcrates.key.CrateKey;
 import su.nightexpress.excellentcrates.opening.impl.BasicOpening;
+import su.nightexpress.excellentcrates.util.Cooldown;
 import su.nightexpress.excellentcrates.util.InteractType;
 import su.nightexpress.nightcore.config.FileConfig;
 import su.nightexpress.nightcore.manager.AbstractManager;
@@ -425,11 +428,17 @@ public class CrateManager extends AbstractManager<CratesPlugin> {
     }
 
     public void previewCrate(@NotNull Player player, @NotNull CrateSource source) {
+        if (Cooldown.isOnCooldown("crate-preview", player)) {
+            player.sendMessage("§cYou must wait a few seconds before previewing a crate again!");
+            return;
+        }
+
         Crate crate = source.getCrate();
         PreviewMenu menu = this.getPreview(crate);
         if (menu == null) return;
 
         menu.open(player, source);
+        Cooldown.addCooldown("crate-preview", player, 2);
     }
 
     public void interactCrate(@NotNull Player player, @NotNull Crate crate, @NotNull InteractType action, @Nullable ItemStack item, @Nullable Block block) {

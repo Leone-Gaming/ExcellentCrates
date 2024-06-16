@@ -19,6 +19,7 @@ import su.nightexpress.excellentcrates.hooks.impl.PlaceholderHook;
 import su.nightexpress.excellentcrates.key.KeyManager;
 import su.nightexpress.excellentcrates.menu.MenuManager;
 import su.nightexpress.excellentcrates.opening.OpeningManager;
+import su.nightexpress.excellentcrates.util.Cooldown;
 import su.nightexpress.excellentcrates.util.Creator;
 import su.nightexpress.nightcore.NightDataPlugin;
 import su.nightexpress.nightcore.command.api.NightPluginCommand;
@@ -88,6 +89,8 @@ public class CratesPlugin extends NightDataPlugin<CrateUser> {
         if (Plugins.hasPlaceholderAPI()) {
             PlaceholderHook.setup(this);
         }
+
+        Cooldown.createCooldown("crate-preview");
     }
 
     private void setupHologramHandler() {
